@@ -1994,3 +1994,65 @@ a:focus-visible, button:focus-visible{
   background: var(--gold);
   color: #FFFFFF;
 }
+
+/* ---------- Celebration Card Direction Button ---------- */
+.celebration-card__dir-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0.8rem auto 1.4rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: var(--emerald-deep);
+  color: var(--gold-pale);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.84rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(30, 48, 38, 0.2);
+}
+.celebration-card__dir-btn:hover {
+  background: #375343;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(30, 48, 38, 0.35);
+}
+
+/* ---------- Wishes Bottom Venue & Directions Area ---------- */
+.wishes-venue-cta {
+  margin-top: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.wishes-venue-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--emerald-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.4rem 0 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.wishes-venue-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.wishes-venue-btn {
+  padding: 0.75rem 1.6rem;
+  font-size: 0.84rem;
+}
