@@ -27,6 +27,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <!-- Self-hosted premium script font — preloaded so the couple's names render
      correctly on first paint on every device (no external dependency, no FOUT flash) -->
@@ -406,6 +411,71 @@
       <a class="button button--ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Eventz+Square+Convention+Centre+Kanchippura" target="_blank" rel="noopener">
         Open in Google Maps
       </a>
+    </div>
+  </section>
+
+  <!-- ============ WISHES WALL ("SEND YOUR LOVE") ============ -->
+  <section class="section wishes-section" id="wishes-wall">
+    <div class="wishes-content reveal">
+
+      <div class="wishes-header">
+        <div class="wishes-monogram" aria-hidden="true">
+          <span class="monogram-text">H &amp; A</span>
+        </div>
+        <span class="section-eyebrow">— SEND YOUR LOVE —</span>
+        <h2 class="section-title">Wishes Wall</h2>
+        <div class="divider divider--small"><span></span><i></i><span></span></div>
+      </div>
+
+      <!-- Wishes Form Card -->
+      <div class="wishes-form-container">
+        <form class="wishes-form" id="wishesForm">
+          <div class="wishes-form-group">
+            <input type="text" id="wishesName" placeholder="Your name" class="wishes-input" required autocomplete="name" />
+          </div>
+
+          <div class="wishes-form-group">
+            <textarea id="wishesMessage" placeholder="Write a prayer, blessing, or warm wish for Hanna &amp; Ajmal..."
+              class="wishes-textarea" rows="4" required></textarea>
+          </div>
+
+          <button type="submit" class="wishes-submit-btn">
+            <span>SEND WISH</span> <i class="fas fa-heart"></i>
+          </button>
+        </form>
+
+        <div id="wishesSuccessMsg" class="wishes-success-msg">
+          <i class="fas fa-check-circle" style="color:var(--emerald); margin-right:6px;"></i>
+          Thank you! Your heartfelt wish has been sent to Hanna &amp; Ajmal.
+        </div>
+
+        <div class="owner-access-wrap">
+          <button type="button" id="ownerLoginBtn" class="owner-login-btn">
+            <i class="fas fa-lock"></i> <span>Owner View</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Wishes Display (Revealed for Owner View) -->
+      <div class="wishes-display" id="wishesDisplay" style="display: none;">
+        <div class="wishes-blessing-header">
+          <span class="section-eyebrow">— WISHES &amp; BLESSINGS —</span>
+          <h3 class="wishes-display-title">Words From Loved Ones</h3>
+          <div class="wishes-count">
+            <i class="fas fa-heart"></i> <span id="wishesCount">0</span> BLESSINGS RECEIVED
+          </div>
+          <div class="wishes-admin-badge" id="wishesAdminBadge" style="display: none;">
+            <i class="fas fa-user-shield"></i> Admin Mode — tap the trash icon to delete a wish
+          </div>
+        </div>
+
+        <div class="wishes-list" id="wishesList"></div>
+
+        <div class="wishes-view-more" id="viewMoreContainer" style="display: none;">
+          <button type="button" class="view-more-btn" id="viewMoreBtn">View More Wishes</button>
+        </div>
+      </div>
+
     </div>
   </section>
 

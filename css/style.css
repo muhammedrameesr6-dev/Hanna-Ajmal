@@ -1648,3 +1648,349 @@ a:focus-visible, button:focus-visible{
   .gate__names{ flex-direction: column; align-items: center; gap: 0; line-height: 1.3; }
   .gate__amp--animate{ line-height: 1.2; }
 }
+
+/* ============================================================
+   WISHES WALL — SEND YOUR LOVE (COLOR THEME ADAPTED FROM SITE 1)
+   ============================================================ */
+.wishes-section {
+  padding: clamp(3.5rem, 7vw, 6rem) 1.5rem;
+  position: relative;
+  background: var(--paper-deep);
+  border-top: 1px solid var(--gold-pale);
+  border-bottom: 1px solid var(--gold-pale);
+}
+
+.wishes-content {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wishes-header {
+  margin-bottom: 2.2rem;
+}
+
+.wishes-monogram {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--emerald-deep) 0%, #121c16 100%);
+  border: 1.5px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.4rem;
+  box-shadow: 0 6px 20px rgba(30, 48, 38, 0.22);
+  transition: transform 0.4s var(--ease);
+}
+.wishes-monogram:hover {
+  transform: scale(1.08);
+}
+
+.wishes-monogram .monogram-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+  letter-spacing: 0.12em;
+}
+
+.wishes-header .section-eyebrow {
+  display: block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.wishes-header .section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4.2vw, 2.7rem);
+  font-weight: 500;
+  color: var(--emerald-deep);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* Wishes Card Container */
+.wishes-form-container {
+  background: #FFFFFF;
+  padding: clamp(2rem, 5vw, 2.8rem) clamp(1.4rem, 4vw, 2.5rem);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px -12px rgba(30, 48, 38, 0.12);
+  border: 1px solid var(--gold-pale);
+  position: relative;
+}
+
+.wishes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wishes-form-group {
+  text-align: left;
+}
+
+.wishes-input,
+.wishes-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1.5px solid var(--gold-pale);
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.98rem;
+  color: var(--ink);
+  background: rgba(246, 241, 234, 0.45);
+  transition: border-color 0.25s, background-color 0.25s, box-shadow 0.25s;
+  box-sizing: border-box;
+}
+
+.wishes-input::placeholder,
+.wishes-textarea::placeholder {
+  color: #8C9993;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+.wishes-input:focus,
+.wishes-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(201, 160, 122, 0.18);
+}
+
+.wishes-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.55;
+}
+
+/* Submit Button in Site 1 Luxury Theme */
+.wishes-submit-btn {
+  background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-deep) 100%);
+  color: #FFFFFF;
+  border: 1px solid var(--gold);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 22px -6px rgba(30, 48, 38, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.wishes-submit-btn:hover {
+  background: linear-gradient(135deg, #385544 0%, var(--emerald) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -6px rgba(30, 48, 38, 0.5);
+}
+
+.wishes-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.wishes-submit-btn i {
+  color: var(--gold-soft);
+  font-size: 0.95rem;
+}
+
+.wishes-success-msg {
+  display: none;
+  text-align: center;
+  margin-top: 1.2rem;
+  color: var(--emerald-deep);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  padding: 0.8rem 1rem;
+  background: rgba(46, 69, 56, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(46, 69, 56, 0.2);
+}
+
+/* Owner View Access */
+.owner-access-wrap {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.owner-login-btn {
+  background: transparent;
+  border: 1px solid var(--gold-pale);
+  color: var(--gold);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.25s ease;
+}
+
+.owner-login-btn:hover {
+  background: rgba(201, 160, 122, 0.12);
+  border-color: var(--gold);
+  color: var(--emerald-deep);
+}
+
+/* Wishes Display (Admin/Owner Mode) */
+.wishes-display {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px dashed var(--gold-pale);
+  text-align: center;
+}
+
+.wishes-blessing-header .section-eyebrow {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.wishes-display-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--emerald-deep);
+  margin: 0.3rem 0 0.5rem;
+}
+
+.wishes-count {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+}
+
+.wishes-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(46, 69, 56, 0.1);
+  color: var(--emerald-deep);
+  font-size: 0.82rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.wishes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.wish-item {
+  background: #FFFFFF;
+  border: 1px solid var(--gold-pale);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(30, 48, 38, 0.05);
+}
+
+.wish-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.wish-content {
+  flex: 1;
+}
+
+.wish-author {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--emerald-deep);
+  margin-bottom: 0.25rem;
+}
+
+.wish-message {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+  word-break: break-word;
+}
+
+.wish-time {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+
+.wish-delete-btn {
+  background: transparent;
+  border: none;
+  color: #C8385C;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  opacity: 0.6;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.wish-delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.wishes-view-more {
+  margin-top: 1.5rem;
+}
+
+.view-more-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--emerald-deep);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  padding: 0.6rem 1.6rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.view-more-btn:hover {
+  background: var(--gold);
+  color: #FFFFFF;
+}

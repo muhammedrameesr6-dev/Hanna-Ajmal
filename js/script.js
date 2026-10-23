@@ -594,3 +594,340 @@ document.addEventListener("DOMContentLoaded", initFloatingFlowers);
 
 }());
 
+/* ==========================================================================
+   WISHES WALL — SEND YOUR LOVE (FIREBASE + LOCALSTORAGE WITH OWNER VIEW)
+   ========================================================================== */
+(function initWishesWall() {
+  "use strict";
+
+  var form = document.getElementById("wishesForm");
+  var wishesDisplay = document.getElementById("wishesDisplay");
+  var wishesList = document.getElementById("wishesList");
+  var wishesCount = document.getElementById("wishesCount");
+  var ownerLoginBtn = document.getElementById("ownerLoginBtn");
+  var adminBadge = document.getElementById("wishesAdminBadge");
+  var viewMoreContainer = document.getElementById("viewMoreContainer");
+  var viewMoreBtn = document.getElementById("viewMoreBtn");
+
+  if (!form) return;
+
+  var ADMIN_PASSWORD = "123456";
+  var DB_REF = "hanna_ajmal_wishes";
+  var LOCAL_KEY = "hanna_ajmal_wishes_data";
+
+  var isAdmin = sessionStorage.getItem("wishesAdminAuthed") === "true";
+  var displayLimit = 5;
+  var allWishes = [];
+  var showingAll = false;
+  var database = null;
+
+  // Initialize Firebase Realtime Database
+  var firebaseConfig = {
+    apiKey: "AIzaSyAnbLrIfm_MUUzA9V-bvc83n1wUA2Ys0PA",
+    authDomain: "sajjad-ayesha-wedding.firebaseapp.com",
+    databaseURL: "https://sajjad-ayesha-wedding-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "sajjad-ayesha-wedding",
+    storageBucket: "sajjad-ayesha-wedding.firebasestorage.app",
+    messagingSenderId: "951387094771",
+    appId: "1:951387094771:web:dd233c820e672126b4c186"
+  };
+
+  try {
+    if (typeof firebase !== "undefined") {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      database = firebase.database();
+    }
+  } catch (e) {
+    console.warn("Firebase initialization warning (using local fallback):", e);
+  }
+
+  function getLocalWishes() {
+    try {
+      var raw = localStorage.getItem(LOCAL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLocalWishes(list) {
+    try {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+    } catch (e) {}
+  }
+
+  // Format timestamp nicely
+  function formatDate(timestamp) {
+    var date = new Date(timestamp);
+    var months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    var day = date.getDate();
+    var month = months[date.getMonth()];
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    return day + " " + month + " AT " + hours + ":" + minutes + " " + ampm;
+  }
+
+  // Avatar background colors in luxury emerald & gold tones
+  function getAvatarColor(name) {
+    var colors = [
+      "linear-gradient(135deg, #2E4538 0%, #1E3026 100%)", // deep emerald
+      "linear-gradient(135deg, #C9A07A 0%, #9A7040 100%)", // warm gold
+      "linear-gradient(135deg, #4A6355 0%, #2A3C33 100%)", // sage green
+      "linear-gradient(135deg, #A88258 0%, #684C2C 100%)", // antique bronze
+      "linear-gradient(135deg, #1F2D24 0%, #0E1611 100%)"  // forest night
+    ];
+    var code = (name || "A").charCodeAt(0);
+    return colors[code % colors.length];
+  }
+
+  function escapeHtml(text) {
+    var div = document.createElement("div");
+    div.textContent = text || "";
+    return div.innerHTML;
+  }
+
+  function createWishHTML(wish) {
+    var initial = (wish.name || "A").trim().charAt(0).toUpperCase();
+    var avatarColor = getAvatarColor(wish.name);
+
+    var item = document.createElement("div");
+    item.className = "wish-item";
+
+    item.innerHTML =
+      '<div class="wish-avatar" style="background:' + avatarColor + ';">' +
+        '<span>' + initial + '</span>' +
+      '</div>' +
+      '<div class="wish-content">' +
+        '<div class="wish-author">' + escapeHtml(wish.name) + '</div>' +
+        '<div class="wish-message">' + escapeHtml(wish.message) + '</div>' +
+        '<div class="wish-time">' + formatDate(wish.timestamp || Date.now()) + '</div>' +
+      '</div>';
+
+    if (isAdmin) {
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "wish-delete-btn";
+      delBtn.setAttribute("aria-label", "Delete this wish");
+      delBtn.title = "Delete wish";
+      delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+      delBtn.addEventListener("click", function () {
+        if (window.confirm('Delete wish from "' + wish.name + '"?')) {
+          if (database && wish.id) {
+            database.ref(DB_REF + "/" + wish.id).remove();
+          }
+          // Also remove from local
+          allWishes = allWishes.filter(function (w) { return w.id !== wish.id; });
+          saveLocalWishes(allWishes);
+          displayWishes();
+        }
+      });
+      item.appendChild(delBtn);
+    }
+
+    return item;
+  }
+
+  function displayWishes() {
+    if (!wishesList || !wishesDisplay) return;
+    wishesList.innerHTML = "";
+
+    if (!isAdmin || allWishes.length === 0) {
+      wishesDisplay.style.display = "none";
+      return;
+    }
+
+    wishesDisplay.style.display = "block";
+    if (wishesCount) wishesCount.textContent = allWishes.length;
+
+    var count = showingAll ? allWishes.length : Math.min(displayLimit, allWishes.length);
+    var list = allWishes.slice(0, count);
+
+    list.forEach(function (w) {
+      wishesList.appendChild(createWishHTML(w));
+    });
+
+    if (viewMoreContainer) {
+      viewMoreContainer.style.display = (allWishes.length > displayLimit && !showingAll) ? "block" : "none";
+    }
+  }
+
+  function updateAdminUI() {
+    if (adminBadge) adminBadge.style.display = isAdmin ? "inline-flex" : "none";
+    if (ownerLoginBtn) {
+      ownerLoginBtn.innerHTML = isAdmin
+        ? '<i class="fas fa-lock-open"></i> <span>Log out of Owner View</span>'
+        : '<i class="fas fa-lock"></i> <span>Owner View</span>';
+    }
+    displayWishes();
+  }
+
+  // Load from Firebase Realtime Database
+  function loadWishes() {
+    if (database) {
+      var ref = database.ref(DB_REF);
+      ref.on("value", function (snapshot) {
+        var remote = [];
+        var val = snapshot.val();
+        if (val) {
+          Object.keys(val).forEach(function (k) {
+            var item = val[k];
+            item.id = k;
+            remote.push(item);
+          });
+        }
+        if (remote.length > 0) {
+          allWishes = remote;
+          saveLocalWishes(allWishes);
+        } else {
+          allWishes = getLocalWishes();
+        }
+        allWishes.sort(function (a, b) { return (b.timestamp || 0) - (a.timestamp || 0); });
+        displayWishes();
+      }, function () {
+        allWishes = getLocalWishes();
+        displayWishes();
+      });
+    } else {
+      allWishes = getLocalWishes();
+      displayWishes();
+    }
+  }
+
+  // Check URL query ?admin=1
+  (function checkAdminParam() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("admin") === "1" && !isAdmin) {
+      var pass = window.prompt("Enter Owner Password:");
+      if (pass === ADMIN_PASSWORD) {
+        sessionStorage.setItem("wishesAdminAuthed", "true");
+        isAdmin = true;
+      } else if (pass !== null) {
+        alert("Incorrect password.");
+      }
+    }
+  })();
+
+  if (ownerLoginBtn) {
+    ownerLoginBtn.addEventListener("click", function () {
+      if (isAdmin) {
+        if (window.confirm("Log out of Owner View?")) {
+          sessionStorage.removeItem("wishesAdminAuthed");
+          isAdmin = false;
+          updateAdminUI();
+        }
+        return;
+      }
+      var pass = window.prompt("Enter Owner Password:");
+      if (pass === ADMIN_PASSWORD) {
+        sessionStorage.setItem("wishesAdminAuthed", "true");
+        isAdmin = true;
+        updateAdminUI();
+        if (wishesDisplay) {
+          setTimeout(function () {
+            wishesDisplay.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }, 200);
+        }
+      } else if (pass !== null) {
+        alert("Incorrect password.");
+      }
+    });
+  }
+
+  if (viewMoreBtn) {
+    viewMoreBtn.addEventListener("click", function () {
+      showingAll = true;
+      displayWishes();
+    });
+  }
+
+  // Form Submission
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var nameInput = document.getElementById("wishesName");
+    var msgInput = document.getElementById("wishesMessage");
+    var name = nameInput ? nameInput.value.trim() : "";
+    var message = msgInput ? msgInput.value.trim() : "";
+
+    if (!name || !message) {
+      alert("Please enter your name and message.");
+      return;
+    }
+
+    if (message.length > 500) {
+      alert("Please keep your message under 500 characters.");
+      return;
+    }
+
+    var wish = {
+      name: name,
+      message: message,
+      timestamp: Date.now()
+    };
+
+    var btn = form.querySelector(".wishes-submit-btn");
+    var originalHTML = btn ? btn.innerHTML : "SEND WISH";
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>SENDING...</span>';
+      btn.disabled = true;
+    }
+
+    function onComplete() {
+      if (nameInput) nameInput.value = "";
+      if (msgInput) msgInput.value = "";
+
+      if (btn) {
+        btn.innerHTML = '<i class="fas fa-check"></i> <span>WISH SENT!</span>';
+      }
+
+      var successMsg = document.getElementById("wishesSuccessMsg");
+      if (successMsg) {
+        successMsg.style.display = "block";
+      }
+
+      setTimeout(function () {
+        if (btn) {
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+        }
+      }, 3500);
+
+      if (isAdmin && wishesDisplay) {
+        setTimeout(function () {
+          wishesDisplay.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 300);
+      }
+    }
+
+    // Save to Firebase
+    if (database) {
+      var newRef = database.ref(DB_REF).push();
+      wish.id = newRef.key;
+      newRef.set(wish, function (err) {
+        if (err) {
+          console.warn("Firebase save error, saved locally:", err);
+        }
+        allWishes.unshift(wish);
+        saveLocalWishes(allWishes);
+        displayWishes();
+        onComplete();
+      });
+    } else {
+      wish.id = "local_" + Date.now();
+      allWishes.unshift(wish);
+      saveLocalWishes(allWishes);
+      displayWishes();
+      onComplete();
+    }
+  });
+
+  updateAdminUI();
+  loadWishes();
+})();
+
+
